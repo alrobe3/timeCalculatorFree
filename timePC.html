@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+ <script src="http://adamlroberts.com/jquery.mask.min"></script>
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/black-tie/jquery-ui.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<div id="timeCalculator" title="Time Calculator">
+  <p>
+    <label for="txtTotalWorked"></label>
+    <label for="txtTtlHrs"></label>
+    Total Hours Scheduled<br />
+    <input type="text" name="txtTtlHrs" id="txtTtlHrs" value="40"/>
+    <br />
+     
+    Hours Worked<br />
+    <input type="text" name="txtTotalWorked" id="txtTotalWorked" />
+    <br />
+    
+    <label for="txtTimeIn"></label>
+    Time In<br />
+  <input type="text" name="txtTimeIn" id="txtTimeIn" class="time"/><br />
+  
+  <p>
+    <label for="txtHrsNeeded"></label>
+    
+  Hours Needed
+  <input type="text" name="txtHrsNeeded" id="txtHrsNeeded" />
+    <br />
+  <label for="txtLunch"></label>
+  Lunch
+  <input type="text" name="txtLunch" id="txtLunch" class="time" value="0030"/>
+  <br />
+  <label for="txtTimeOut"></label>
+ Time Out
+ <input type="text" name="txtTimeOut" id="txtTimeOut" class="time" />
+  </p>
+ <button id="btnCalc">Calculate</button>
+</div>
+
+<script>
+$(document).ready(function() {
+	$('.time').mask('00:00:00');
+	$("#timeCalculator").dialog();
+	$("#btnCalc").click(function(){
+	var ttlHrs = $("#txtTtlHrs").val();
+	var totalWorked = $("#txtTotalWorked").val();
+	var timeIn = $("#txtTimeIn").val();
+	var hrsNeeded = $("#txtHrsNeeded").val();
+	var lunch = $("#txtLunch").val();
+	
+//	lunch = parseFloat(lunch);
+	var lunchHrs = lunch.substr( 0, 2 );
+	var lunchMin = lunch.substr( 3, 2);
+	
+	var timeInHr = timeIn.substr( 0, 2 );
+	var timeInMin = timeIn.substr( 3, 2 );
+	
+	timeInMin = timeInMin / 60;
+	
+	var timeIn2 = parseFloat(timeInHr) + parseFloat(timeInMin);
+
+	lunchMin = parseFloat(lunchMin / 60);
+	
+	hrsNeeded = ttlHrs - totalWorked + lunchMin;
+	$("#txtHrsNeeded").val(hrsNeeded);
+	
+	timeOut = timeIn2 + parseFloat(hrsNeeded);
+	timeOutHrs = parseInt(timeOut);
+	if(timeOutHrs < 10){timeOutHrs = "0" + timeOutHrs };
+	timeOutMin = timeOut % 1;
+	timeOutMin = timeOutMin *60;
+	timeOutMin = parseInt(timeOutMin);
+	if(timeOutMin < 10){timeOutMin = "0" + timeOutMin };
+	
+	
+	$("#txtTimeOut").val(timeOutHrs + ":" + timeOutMin);
+	
+	console.log("hrs needed = " + timeInHr);
+	console.log("lunch = " + timeInMin);
+	});
+});
+</script>
+</body>
+</html>
